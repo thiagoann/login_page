@@ -1,15 +1,24 @@
+// ignore_for_file: avoid_print, unnecessary_string_interpolations
+
+
 import 'package:flutter/material.dart';
-import 'package:login_page/welcome_page.dart';
+import 'welcome_page.dart';
 //import 'path_provider.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget{
   final String? title;
+  @override
+  LoginPageState createState() => LoginPageState();
   const LoginPage({super.key, required this.title});
+}
 
-  get inputMatricula => null;
+class LoginPageState extends State<LoginPage> {
+  bool hidden = true;
+  
   
   @override
   Widget build(BuildContext context) {
+
     final logo = Padding(
         padding: const EdgeInsets.all(10),
         child: Hero(
@@ -26,19 +35,24 @@ class LoginPage extends StatelessWidget {
         decoration: InputDecoration(
             hintText: 'Matricula',
             contentPadding:
-                const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-            border:
+                 const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            border: 
                 OutlineInputBorder(borderRadius: BorderRadius.circular(10.0))),
       ),
+
     );
 
     final inputPassword = Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: TextField(
         keyboardType: TextInputType.visiblePassword,
-        obscureText: true,
+        obscureText: hidden,
         decoration: InputDecoration(
           hintText: 'Password',
+          suffix: InkWell(
+            onTap: togglePasswordView,
+            child:  Icon(hidden ? Icons.visibility: Icons.visibility_off),
+          ),
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(15.0)),
@@ -57,11 +71,17 @@ class LoginPage extends StatelessWidget {
             ),
           child: const Text('Login', style: TextStyle(color: Colors.white, fontSize: 20)),
           ), 
-          onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context)=> WelcomePage()));
+          onPressed: () { 
+          Navigator.push(context, MaterialPageRoute(builder: (context)=> WelcomePage()));
           
           },
           )
         ),
+      );
+      
+      final buttonForgotPassword = TextButton(
+        child: const Text('Forgot password?', style: TextStyle(color: Colors.grey, fontSize: 15),),
+        onPressed: () {},
       );
 
     return Scaffold(
@@ -73,8 +93,15 @@ class LoginPage extends StatelessWidget {
         logo,
         inputMatricula,
         inputPassword,
-        buttonLogin
+        buttonLogin,
+        buttonForgotPassword
       ],
     )));
+  }
+
+  void togglePasswordView(){
+    setState(() {
+      hidden = !hidden;
+    });
   }
 }
